@@ -2,14 +2,12 @@
 
 ft_strlen:
 
-	xor %rax, %rax
+	xor  %rax, %rax
+	movq $0xffffffffffffffff, %rcx
 
-.loop:
+	repne scasb /* rcx-- until *char(rdi++) != *char(rax) */
+	notq  %rcx
+	dec   %rcx /* two's complement rcx */
+	mov   %rcx, %rax
 
-	cmpb $0, (%rdi,%rax)
-	je   .end
-	inc  %rax
-	jmp  .loop
-
-.end:
 	ret

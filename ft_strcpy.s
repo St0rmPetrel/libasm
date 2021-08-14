@@ -6,8 +6,8 @@ ft_strcpy:
 
 .loop:
 
-	lodsb
-	stosb
+	lodsb  /* Load (rsi) -> al */
+	stosb  /* Wrirt al -> (rdi) */
 	testb %al, %al
 	jne   .loop
 

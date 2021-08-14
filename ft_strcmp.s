@@ -1,27 +1,26 @@
-				global      _ft_strcmp
+.globl ft_strcmp
 
-				section		.text
+ft_strcmp:
 
-_ft_strcmp:
-                push        rcx
-                push        rdx
-                xor			rax, rax
-                xor			rcx, rcx
-				xor			rdx, rdx
-loop:
-                cmp			byte [rdi+rcx], 0
-				je			done
-				cmp			byte [rdi+rcx], 0
-				je			done
-				mov			dl, byte [rsi+rcx]
-				cmp			byte [rdi+rcx], dl
-				jne			done
-				inc			rcx
-				jmp			loop
-done:
-				mov			al, byte [rdi+rcx]
-				mov			dl, byte [rsi+rcx]
-                sub			eax, edx
-                pop         rdx
-                pop         rcx
-				ret
+	xor		%rax, %rax
+
+.loop:
+
+	cmpsb  /* cmp *char(rdi), *char(rsi) */
+	jne		.end
+	cmpb	$0, (%rdi)
+	je		.endz
+	inc		%rdi
+	inc		%rsi
+	jmp		.loop
+
+.end:
+	jg		.endg
+	movl	$1, %eax
+	ret
+.endg:
+	movl	$-1, %eax
+	ret
+.endz:
+	movl	$0, %eax
+	ret
