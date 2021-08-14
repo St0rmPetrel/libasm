@@ -7,9 +7,9 @@ ft_strlen:
 .loop:
 
 	cmpb $0, (%rdi,%rax)
-	je .end
-	inc %rax
-	jmp	.loop
+	je   .end
+	inc  %rax
+	jmp  .loop
 
 .end:
 	ret

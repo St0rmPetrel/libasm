@@ -1,23 +1,18 @@
-				global		_ft_strcpy
+.globl ft_strcpy
 
-				section		.text
-_ft_strcpy:		
-                push        rdx
-				push		rcx
-				xor			rcx, rcx
-                xor         rdx, rdx
+ft_strcpy:
 
-loop:			
-				cmp			byte [rsi+rcx], 0
-				je			done
-				mov			dl, byte [rsi+rcx]
-				mov			byte [rdi+rcx], dl
-				inc			rcx
-				jmp			loop
+	push %rdi
 
-done:			
-				mov			rax, rdi
-				mov			byte [rdi+rcx],	0
-				pop			rcx
-                pop         rdx
-				ret
+.loop:
+
+	lodsb
+	stosb
+	testb %al, %al
+	jne   .loop
+
+.end:
+	pop %rax
+	ret
+
+
