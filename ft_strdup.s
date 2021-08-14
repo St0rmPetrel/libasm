@@ -17,7 +17,7 @@ ft_strdup:
 	movq	%rax, %rdi
 	pop		%rcx
 	pop		%rsi
-	rep movsb  /* repid strlen(s1) times: *char(rdi++) = *char(rsi++) */
+	rep movsb  /* repeat strlen(s1) times: *char(rdi++) = *char(rsi++) */
 
 .end:
 	ret
