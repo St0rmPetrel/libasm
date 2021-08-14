@@ -1,15 +1,15 @@
-				global		_ft_strlen
+.globl ft_strlen
 
-				section		.text
-_ft_strlen:		
-				push		rdi
-                xor         rax, rax
-loop:			cmp			byte [rdi], 0
-				je			done
-				inc			rdi
-				inc			rax
-				jmp			loop
+ft_strlen:
 
-done:			
-				pop			rdi
-				ret
+	xor %rax, %rax
+
+.loop:
+
+	cmpb $0, (%rdi,%rax)
+	je .end
+	inc %rax
+	jmp	.loop
+
+.end:
+	ret

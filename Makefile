@@ -1,39 +1,41 @@
-.PHONY: all fclean clean re rebn test
+NAME		=	libasm.a
 
-NAME := libasm.a
-SRCS := ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s ft_read.s ft_strdup.s
-SRCS_BONUS := valid_base_bonus.s is_white_space_bonus.s ft_atoi_base.s ft_pow_bonus.s ft_strchr_bonus.s skip_spaces_bonus.s proces_sign_bonus.s ft_list_push_front.s ft_list_size.s
-OBJS := $(SRCS:.s=.o)
-OBJS_BONUS := $(SRCS_BONUS:.s=.o)
+SRCS		=	ft_strlen.s \
+#				ft_strcpy.s \
+#				ft_strcmp.s \
+#				ft_write.s \
+#				ft_read.s \
+#				ft_strdup.s
 
-SYSTEM := $(shell uname -s)
+HDR			=	libasm.h
 
-FLAGS := -fmacho64
-ifeq ($(SYSTEM), Linux)
-FLAGS := -felf64
-endif
+BUILDDIR	=	objs
 
+CC			=	as
+
+OBJS		=	$(addprefix $(BUILDDIR)/, $(SRCS:.s=.o))
+
+.PHONY: all
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@ar rcs $(NAME) $(OBJS)
+$(NAME): $(OBJS) $(HDR)
+	@ar	rcs	$(NAME)	$(OBJS)
 
-%.o: %.s
-	nasm $(FLAGS) $^
+$(OBJS): |$(BUILDDIR) $(SRCS)
 
-bonus: all $(OBJS_BONUS)
-	@ar rcs $(NAME) $(OBJS_BONUS)
+$(BUILDDIR):
+	@mkdir	$(BUILDDIR)
 
+$(BUILDDIR)/%.o: %.s
+	@$(CC)	$^	-o $@
+
+.PHONY: clean
 clean:
-	rm -f $(OBJS) $(OBJS_BONUS)
+	@rm -rf $(BUILDDIR)
 
+.PHONY: fclean
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
+.PHONY: re
 re: fclean all
-
-rebn: re bonus
-
-test: bonus
-	@gcc main.c $(NAME) -o test && ./test
-	@rm test
