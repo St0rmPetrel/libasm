@@ -1,36 +1,26 @@
-				global			_ft_strdup
-				extern			_malloc
-				extern			_ft_strlen
-				extern			_ft_strcpy
-				extern			___error
-				section			.text
+.globl ft_strdup
 
-_ft_strdup:		
-				push			rdi
-				push			rsi
+/* char *ft_strdup(const char *s1) */
+ft_strdup:
 
-				push			rdi
-				call			_ft_strlen
-				mov				rdi, rax
-				inc				rdi
-				call			_malloc
-				jc				return_error
-				mov				rdi, rax
-				pop				rsi
-				call			_ft_strcpy
-				jmp				done
+	push	%rdi
+	call	ft_strlen
 
-return_error:	
-				pop				rdi
-				push			rdx
-				mov				rdx, rax
-                call			___error
-                mov				[rax], rdx
-				pop				rdx
-				xor				rax, rax
-				ret
+	inc		%rax
+	push	%rax
+	movq	%rax, %rdi
+	call	malloc   /* rax = malloc(len(s1) + 1) */
 
-done:			
-				pop				rsi
-				pop				rdi
-				ret
+	testq	%rax, %rax
+	je		.malloc_error  /* if rax == NULL goto malloc_error */
+
+	movq	%rax, %rdi
+	pop		%rcx
+	pop		%rsi
+	rep movsb  /* repid strlen(s1) times: *char(rdi++) = *char(rsi++) */
+
+.end:
+	ret
+.malloc_error:
+	addq	$16, %rsp
+	ret
